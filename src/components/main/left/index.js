@@ -1,7 +1,8 @@
 import React,{useState} from 'react'
 import {FaProductHunt,FaTrash} from 'react-icons/fa';
 import {MdDone,MdEdit} from 'react-icons/md';
-const Product = ({data}) => {
+const Product = ({data,onHandleRemove,onHandleDataReceive}) => {
+    
     const [term,setTerm]=useState("");
     const onSearchTerm=(e)=>{
         setTerm(e.target.value);
@@ -14,6 +15,8 @@ const Product = ({data}) => {
         }
     })
     console.log('searchDataReducers',searchDataReducers)
+
+    
     return (
         <div className='w-1/2 '>
             <div className=' flex justify-center bg-[#424242]'>
@@ -42,7 +45,7 @@ const Product = ({data}) => {
             </div>
             <div className='pb-2 flex justify-center bg-[#424242]'>
                 <input 
-                    className='w-11/12 outline-none border-b py-1 px-2' 
+                    className='w-11/12 outline-none border-b py-1 px-2 bg-[#424242]' 
                     placeholder='Search course ...'
                     value={term} onChange={onSearchTerm}
                 />
@@ -52,14 +55,17 @@ const Product = ({data}) => {
                     <div className='grid grid-cols-5 gap-4 mt-2'>
                         {term.length===0?(
                             data.map((item)=>{
-                                return <div key={item.id} className='bg-[#424242] rounded-md cursor-pointer'>
+                                return <div key={item.id} 
+                                            className='bg-[#424242] rounded-md cursor-pointer'
+                                            onClick={()=>onHandleDataReceive(item)}
+                                        >
                                             <div>
                                                 <div><img src={item.img} /></div>
                                                 <div className='px-3 text-white'>
                                                     <div className='pt-1 pb-8'>{item.desc}</div>
                                                     <div className='flex justify-between mb-3'>
-                                                        <div><FaTrash/></div>
-                                                        <div><MdEdit/></div>
+                                                        <div  onClick={()=>onHandleRemove(item.id)}><FaTrash/></div>
+                                                        <di><MdEdit/></di>
                                                     </div>
                                                 </div>
                                             </div>
@@ -67,13 +73,16 @@ const Product = ({data}) => {
                             })
                         ):(
                             searchDataReducers.map((item)=>{
-                                return <div key={item.id} className='bg-[#424242] rounded-md cursor-pointer'>
+                                return <div key={item.id} 
+                                            className='bg-[#424242] rounded-md cursor-pointer'
+                                            onClick={()=>onHandleDataReceive(item)}
+                                        >
                                             <div>
                                                 <div><img src={item.img} /></div>
                                                 <div className='px-3 text-white'>
                                                     <div className='pt-1 pb-8'>{item.desc}</div>
                                                     <div className='flex justify-between mb-3'>
-                                                        <div><FaTrash/></div>
+                                                        <div  onClick={()=>onHandleRemove(item.id)}><FaTrash/></div>
                                                         <div><MdEdit/></div>
                                                     </div>
                                                 </div>
