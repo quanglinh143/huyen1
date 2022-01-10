@@ -1,30 +1,37 @@
 import React,{useState} from 'react'
 import {FaProductHunt,FaTrash} from 'react-icons/fa';
 import {MdDone,MdEdit} from 'react-icons/md';
-const Product = ({data,onHandleRemove,onHandleDataReceive}) => {
+const Product = ({data,onHandleRemove,onHandleDataReceive,addItem,setAddItem,onHandleEdit,setEditItem}) => {
     
     const [term,setTerm]=useState("");
     const onSearchTerm=(e)=>{
         setTerm(e.target.value);
 
     }
-    console.log('term',term)
+    
     const searchDataReducers=data.filter((fil)=>{
         if(fil.desc.toLowerCase().includes(term.toLowerCase())){
             return fil
         }
     })
-    console.log('searchDataReducers',searchDataReducers)
 
-    
+    const handleAddItem=()=>{
+        setAddItem(!addItem);
+        setEditItem(false)
+    }
     return (
         <div className='w-1/2 '>
             <div className=' flex justify-center bg-[#424242]'>
                 <div className='w-11/12 pb-6 pt-3'>
                     <div className='flex justify-between items-center'>
-                        <div className='w-10 h-10 bg-blue-600 text-white flex justify-center leading-9 text-xl rounded-full'>+</div>
-                        <div className='flex border rounded-2xl px-2 py-1'>
-                            <div className='flex items-center text-white'>
+                        <div 
+                            className='w-10 h-10 bg-blue-600 text-white flex justify-center leading-9 text-xl rounded-full cursor-pointer'
+                            onClick={handleAddItem}
+                        >
+                            +
+                        </div>
+                        <div className='flex border rounded-2xl px-2 py-1 '>
+                            <div className='flex items-center text-white '>
                                 <FaProductHunt/>
                             </div> 
                             <div className='text-white font-semibold text-sm px-2'>
@@ -65,7 +72,7 @@ const Product = ({data,onHandleRemove,onHandleDataReceive}) => {
                                                     <div className='pt-1 pb-8'>{item.desc}</div>
                                                     <div className='flex justify-between mb-3'>
                                                         <div  onClick={()=>onHandleRemove(item.id)}><FaTrash/></div>
-                                                        <di><MdEdit/></di>
+                                                        <di onClick={()=>onHandleEdit(item.id)}><MdEdit/></di>
                                                     </div>
                                                 </div>
                                             </div>

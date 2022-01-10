@@ -1,12 +1,47 @@
-import React from 'react'
-import nbk1 from '../../../img/nbk1.jpg';
+import React,{useState} from 'react'
+// import nbk1 from '../../../img/nbk1.jpg';
 import TextField from '@mui/material/TextField';
 import './index.css';
-const Show = ({dataReceive,show,showList,setShowList,onHandleShowList}) => {
+const Show = ({dataReceive,show,showList,setShowList,onHandleShowList,addItem,dataSubmit,editItem,onHandleEdit,
+    valueName,valuePrice,valueType,valueDesc,valueImg,
+    setValueName,setValuePrice,setValueType,setValueDesc,setValueImg
+
+}) => {
     console.log('dataReceive',dataReceive)
-    console.log('dataReceive',dataReceive.name)
-    const listFil=Object.values(dataReceive);
-    console.log('listFil',listFil[6])
+    console.log('EEEEEEEEE',valueName)
+    const listFil=Object.values(dataReceive)
+  
+    const handleSubmit=(e)=>{
+        
+        e.preventDefault();
+        
+        if(addItem){
+            dataSubmit({
+                name:valueName,
+                price:valuePrice,
+                type:valueType,
+                desc:valueDesc,
+                img:URL.createObjectURL(valueImg),
+            })
+
+        }
+        if(editItem){
+            onHandleEdit({
+                name:valueName,
+                price:valuePrice,
+                type:valueType,
+                desc:valueDesc,
+                img:URL.createObjectURL(valueImg),
+            })
+        }
+       
+
+    }
+    // const handleOnchange=(e)=>{
+    //     setValueInput(e.target.value)
+    // }
+    
+
     return (
         <>
             {show?(
@@ -15,12 +50,12 @@ const Show = ({dataReceive,show,showList,setShowList,onHandleShowList}) => {
                         <div className='w-11/12  flex gap-4  '>
                             <div className='w-1/2'><img src={dataReceive.img}  style={{width:'100%',height:'220px',objectFit:'cover'}}/></div>
                             <div className='w-1/2 '> 
-                                <div className='pb-6 pt-2'>
+                                <div className='pb-6 pt-2 '>
                                     <TextField
                                         
                                         label="Ten"
-                                        value={dataReceive.name}
-                                    
+                                        value={valueName}
+                                        onChange={(e)=>setValueName(e.target.value)}
                                         
                                     />
                                 </div>
@@ -28,7 +63,8 @@ const Show = ({dataReceive,show,showList,setShowList,onHandleShowList}) => {
                                     <TextField
                                         
                                         label="Price"
-                                        value={dataReceive.price}
+                                        value={addItem?valuePrice:editItem?valuePrice:valuePrice}
+                                        onChange={(e)=>setValuePrice(e.target.value)}
                                     />
             
                                 </div>
@@ -37,8 +73,9 @@ const Show = ({dataReceive,show,showList,setShowList,onHandleShowList}) => {
                                 <div className='pb-6'>
                                     <TextField
                                         
-                                        label="type"
-                                        value={dataReceive.type}
+                                        label="Desc"
+                                        value={addItem?valueDesc:editItem?valueDesc:dataReceive.desc}
+                                        onChange={(e)=>setValueDesc(e.target.value)}
                                     />
             
                                 </div>
@@ -55,33 +92,71 @@ const Show = ({dataReceive,show,showList,setShowList,onHandleShowList}) => {
                             <div className=''>
                                 <TextField
                                         
-                                    label="type"
-                                    value={dataReceive.desc}
+                                    label="Type"
+                                    value={addItem?valueType:editItem?valueType:dataReceive.type}
+                                    onChange={(e)=>setValueType(e.target.value)}
                                 />
             
                             </div>
+                            {addItem?(
+                                <div><input type="file"
+                                    onChange={(e)=>setValueImg(e.target.files[0])}
+                                    
+                                /></div>
+                            ):editItem?(
+                                <div><input type="file"
+                                    onChange={(e)=>setValueImg(e.target.files[0])}
+                                    
+                                /></div>
+                            ):null}
                             <div className='pb-6'>
-                                <input type="date" className='w-60 h-10 px-4'/>
+                                <input type="date" className='w-60 h-10 px-4 bg-[#424242] border border-white'/>
             
                             </div>
+                            
                         </div>
                     </div>
+                    {
+                        addItem?(
+                            <div className='w-full flex justify-center pt-4 '>
+                                <div className='w-11/12 '>
+                                    <button 
+                                        className='w-full bg-sky-600 hover:bg-sky-700 py-3 rounded-2xl text-white text-xl font-semibold'
+                                        onClick={handleSubmit}
+                                    >Add Item</button>
+                                </div>
+                            </div>
+                        ):null
+                    }
+                    {
+                        editItem?(
+                            <div className='w-full flex justify-center pt-4 '>
+                                <div className='w-11/12 '>
+                                    <button 
+                                        className='w-full bg-sky-600 hover:bg-sky-700 py-3 rounded-2xl text-white text-xl font-semibold'
+                                        onClick={handleSubmit}
+                                    >Edit Item</button>
+                                </div>
+                            </div>
+                        ):null
+                    }
 
                     <div className='flex justify-center'>
                         <div className='w-11/12'>
-                            <div className='flex justify-between'>
+                            <div className='flex justify-between text-white'>
                                 <div>Danh muc A</div>
                                 <div>Danh sach Sinh vien</div>
                                 <div 
                                     className='cursor-pointer'
                                     onClick={()=>setShowList(!showList)}
                                 >+</div>
+                                
                             </div>
                             {
                                 showList?(
                                     <div>
                                         {listFil[6].map((item)=>{
-                                                return <div key={item.id}>{item.student}</div>
+                                                return <div key={item.id} className='text-white'>{item.student}</div>
                                             })}
                                     </div>
                                 ):null

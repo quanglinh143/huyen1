@@ -8,3 +8,7 @@
 .MuiInputLabel-shrink{
     color: rgb(223, 223, 223) !important;
 }
+
+.MuiOutlinedInput-notchedOutline{
+    border: 1px solid white !important;
+}
